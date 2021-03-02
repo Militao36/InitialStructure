@@ -1,0 +1,30 @@
+{
+  "name": "initial",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "dev": "ts-node-dev -r --respawn --transpileOnly --ignore-watch node_modules --no-notify src/server.ts",
+    "build":"tsc",
+    "start": "node dist/server.js",
+    "test": "jest"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.11",
+    "@types/jest": "^26.0.20",
+    "@typescript-eslint/eslint-plugin": "^4.16.1",
+    "@typescript-eslint/parser": "^4.16.1",
+    "eslint": "^7.21.0",
+    "eslint-config-standard": "^16.0.2",
+    "eslint-plugin-import": "2.22.1",
+    "eslint-plugin-node": "11.1.0",
+    "eslint-plugin-promise": "4.2.1",
+    "jest": "^26.6.3",
+    "ts-jest": "^26.5.2",
+    "ts-node-dev": "^1.1.6",
+    "typescript": "^4.2.2"
+  },
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
