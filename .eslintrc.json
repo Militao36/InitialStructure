@@ -16,6 +16,8 @@
         "@typescript-eslint"
     ],
     "rules": {
+        "indent": "off",
+        "eol-last": "off"
     },
     "ignorePatterns": "dist"
 }
