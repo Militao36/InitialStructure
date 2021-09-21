@@ -3,7 +3,7 @@ import { Request, Response } from 'express'
 import IContainer from '../interfaces/IContainer'
 import { UserRepo } from '../repositories/User'
 
-route('/users')
+@route('/users')
 class UserController {
     private userRepo: UserRepo;
     constructor ({ userRepo }: IContainer) {

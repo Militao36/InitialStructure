@@ -5,6 +5,7 @@ class UserEntity {
     public username: string
     public password: string
     public email: string
+    
     constructor (data: Partial<UserEntity>, uuid = v4()) {
         this.uuid = uuid
         this.username = data.username
