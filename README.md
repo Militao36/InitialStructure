@@ -8,4 +8,4 @@
 
 
 ## Geração de arquivos (modo de uso)
-Ao executar o comando *node ace* automaticamente irá fazer as perguntas para criação de arquivos, onde vc irá escolher quais arquivos serão gerados automaticamentes.
+Ao executar o comando **node ace** automaticamente irá fazer as perguntas para criação de arquivos, onde vc irá escolher quais arquivos serão gerados automaticamentes.
