@@ -1,0 +1,143 @@
+const fs = require('fs')
+const path = require('path')
+
+function capitalizeFirstLetterUpperCase (str = '') {
+  return str.charAt(0).toUpperCase() + str.slice(1)
+}
+
+function capitalizeFirstLetterLowerCase (str = '') {
+  return str.charAt(0).toLocaleLowerCase() + str.slice(1)
+}
+
+function writeFile (dirFile = '', data = '') {
+  try {
+    fs.writeFileSync(dirFile, data)
+  } catch (error) {
+    console.error(error)
+    process.exit(0)
+  }
+}
+
+const createEntity = (fileName = '', force = true) => {
+  if (!fileName) {
+    throw new Error('O nome do arquivo é obrigatório.')
+  }
+
+  const className = `${capitalizeFirstLetterUpperCase(fileName)}Entity`
+
+  const dirFile = path.resolve(__dirname, 'src', 'entity', `${className}.ts`)
+
+  if (fs.existsSync(dirFile) && !force) {
+    throw new Error('O arquivo já existe na pasta')
+  }
+
+  const classEntity = `
+      import { v4 } from 'uuid'
+      class ${className} {
+          public uuid: string
+
+          constructor (data: Partial<${className}>, uuid = v4()) {
+              this.uuid = uuid
+          }
+      }
+
+      export { ${className} }
+  `
+
+  writeFile(dirFile, classEntity)
+}
+
+const createRepo = (fileName = '', force = true) => {
+  if (!fileName) {
+    throw new Error('O nome do arquivo é obrigatório.')
+  }
+
+  const className = `${capitalizeFirstLetterUpperCase(fileName)}Repo`
+  const dirFile = path.resolve(__dirname, 'src', 'repositories', `${className}.ts`)
+
+  if (fs.existsSync(dirFile) && !force) {
+    throw new Error('O arquivo já existe na pasta')
+  }
+
+  const classNameEntity = `${capitalizeFirstLetterUpperCase(fileName)}Entity`
+
+  const classRepo = `
+    import IContainer from '../interfaces/IContainer'
+    import { ${classNameEntity} } from '../entity/${classNameEntity}'
+    import { BaseRepo } from './Base'
+
+    class ${className} extends BaseRepo<${classNameEntity}> {
+        constructor ({ prisma }: IContainer) {
+            super(prisma, '${fileName.toLowerCase()}')
+        }
+    }
+
+    export { ${className} }
+  `
+
+  writeFile(dirFile, classRepo)
+}
+
+const createService = (fileName = '', force = true) => {
+  if (!fileName) {
+    throw new Error('O nome do arquivo é obrigatório.')
+  }
+
+  const className = `${capitalizeFirstLetterUpperCase(fileName)}Service`
+  const dirFile = path.resolve(__dirname, 'src', 'services', `${className}.ts`)
+
+  if (fs.existsSync(dirFile) && !force) {
+    throw new Error('O arquivo já existe na pasta')
+  }
+
+  const classNameRepoUpperCase = `${capitalizeFirstLetterUpperCase(fileName)}Repo`
+  const classNameRepoLowerCase = `${capitalizeFirstLetterLowerCase(fileName)}Repo`
+
+  const classService = `
+      import IContainer from '../interfaces/IContainer'
+      import { ${classNameRepoUpperCase} } from '../repositories/${classNameRepoUpperCase}'
+
+      class ${className} {
+        private ${classNameRepoLowerCase}: ${classNameRepoUpperCase};
+        constructor ({ ${classNameRepoLowerCase} }: IContainer | any) {
+            this.${classNameRepoLowerCase} = ${classNameRepoLowerCase}
+        }
+      }
+
+      export { ${className} }
+  `
+
+  writeFile(dirFile, classService)
+}
+
+const main = () => {
+  const readline = require('readline').createInterface({
+    input: process.stdin,
+    output: process.stdout
+  })
+
+  readline.question('Qual o nome do arquivo que gostaria de gerar?\nObs: Digite no singular. \n', fileName => {
+    readline.question('Qual desses tipos gostaria de gerar? \n[1]-Entity\n[2]-Repositories\n[3]-Service\n[4]-Todos\nDigite o numero correspondente.\n', typeFile => {
+      if (typeFile === '1') {
+        createEntity(fileName, false)
+      }
+
+      if (typeFile === '2') {
+        createRepo(fileName, false)
+      }
+
+      if (typeFile === '3') {
+        createService(fileName, false)
+      }
+
+      if (typeFile === '4') {
+        createEntity(fileName, false)
+        createRepo(fileName, false)
+        createService(fileName, false)
+      }
+      readline.close()
+    })
+  })
+}
+
+main()
