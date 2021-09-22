@@ -1,6 +1,7 @@
 import { loadControllers, scopePerRequest } from 'awilix-express'
 import express from 'express'
 import container from './container'
+
 const app = express()
 
 app.use(express.json())

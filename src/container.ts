@@ -1,12 +1,10 @@
-import { asClass, asValue, createContainer, InjectionMode } from 'awilix'
+import { asValue, createContainer, InjectionMode } from 'awilix'
 import IContainer from './interfaces/IContainer'
 
 import { prisma } from './config/database'
-import { UserRepo } from './repositories/User'
 
 const definition = {
-    prisma: asValue(prisma),
-    userRepo: asClass(UserRepo).singleton()
+    prisma: asValue(prisma)
 }
 
 const container = createContainer<IContainer>({
