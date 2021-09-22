@@ -1,21 +1,10 @@
-import { PrismaClient } from '@prisma/client'
 import { UserEntity } from '../entity/user'
 import IContainer from '../interfaces/IContainer'
+import { BaseRepo } from './Base'
 
-class UserRepo {
-    private prisma: PrismaClient;
+class UserRepo extends BaseRepo<UserEntity> {
     constructor ({ prisma }: IContainer) {
-        this.prisma = prisma
-    }
-
-    async save (user: UserEntity) {
-        await this.prisma.users.create({
-            data: user
-        })
-    }
-
-    async getAll () {
-        return this.prisma.users.findMany()
+        super(prisma, 'users')
     }
 }
 
