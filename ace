@@ -32,13 +32,9 @@ const createEntity = (fileName = '', force = true) => {
   }
 
   const classEntity = `
-      import { v4 } from 'uuid'
-      class ${className} {
-          public uuid: string
-
-          constructor (data: Partial<${className}>, uuid = v4()) {
-              this.uuid = uuid
-          }
+      import { ${className.replace('Entity', '').concat('s')} } from '@prisma/client'
+      class ${className} implements ${className.replace('Entity', '').concat('s')} {
+          uuid: string
       }
 
       export { ${className} }
