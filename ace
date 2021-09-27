@@ -33,8 +33,9 @@ const createEntity = (fileName = '', force = true) => {
 
   const classEntity = `
       import { ${className.replace('Entity', '').concat('s')} } from '@prisma/client'
+      
       class ${className} implements ${className.replace('Entity', '').concat('s')} {
-          uuid: string
+         
       }
 
       export { ${className} }
@@ -86,16 +87,20 @@ const createService = (fileName = '', force = true) => {
     throw new Error('O arquivo já existe na pasta')
   }
 
+  const classNameEntity = `${capitalizeFirstLetterUpperCase(fileName)}Entity`
   const classNameRepoUpperCase = `${capitalizeFirstLetterUpperCase(fileName)}Repo`
   const classNameRepoLowerCase = `${capitalizeFirstLetterLowerCase(fileName)}Repo`
 
   const classService = `
       import IContainer from '../interfaces/IContainer'
       import { ${classNameRepoUpperCase} } from '../repositories/${classNameRepoUpperCase}'
-
-      class ${className} {
+      import { ${classNameEntity} } from '../entity/${classNameEntity}'
+      import { BaseService } from './Base'
+      
+      class ${className} extends BaseService<${classNameRepoUpperCase}, ${classNameEntity}>  {
         private ${classNameRepoLowerCase}: ${classNameRepoUpperCase};
         constructor ({ ${classNameRepoLowerCase} }: IContainer | any) {
+            super(${classNameRepoLowerCase})
             this.${classNameRepoLowerCase} = ${classNameRepoLowerCase}
         }
       }

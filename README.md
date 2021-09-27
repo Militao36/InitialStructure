@@ -3,7 +3,7 @@
 # Funcionalidades
 - Injeção de dependência.
 - Primas ORM já configurado
-- Geração automatica de arquivos
+- Geração automatica de arquivos (Entity, Repo, Service)
 - Adicionado modulo para criação mais simples de rotas/controllers
 
 
