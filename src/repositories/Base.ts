@@ -12,6 +12,7 @@ type Filter = {
 class BaseRepo<T> {
   public prisma: PrismaClient;
   public table: string;
+
   constructor (prisma: PrismaClient, table: string) {
     this.prisma = prisma
     this.table = table
