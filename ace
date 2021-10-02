@@ -111,6 +111,51 @@ const createService = (fileName = '', force = true) => {
   writeFile(dirFile, classService)
 }
 
+const createController = (fileName = '', force = true) => {
+  if (!fileName) {
+    throw new Error('O nome do arquivo é obrigatório.')
+  }
+
+  const className = `${capitalizeFirstLetterUpperCase(fileName)}Controller`
+  const dirFile = path.resolve(__dirname, 'src', 'controllers', `${className}.ts`)
+
+  if (fs.existsSync(dirFile) && !force) {
+    throw new Error('O arquivo já existe na pasta')
+  }
+
+  const classNameService = `${capitalizeFirstLetterUpperCase(fileName)}Service`
+
+  const classController = `
+      import IContainer from '../interfaces/IContainer'
+      import { ${classNameService} } from '../services/${classNameService}'
+      import { GET, PATCH, POST, route } from 'awilix-express'
+      import { Request, Response } from 'express'
+
+      @route('/${fileName.toLowerCase()}')
+      class ${className} {
+        constructor ({ }:IContainer) {} 
+
+        @POST()
+        async save (request: Request, response: Response) {}
+
+        @route('/:uuid')
+        @PATCH()
+        async update (request: Request, response: Response) {}
+
+        @GET()
+        async get (request: Request, response: Response) {}
+
+        @route('/:uuid')
+        @GET()
+        async getById (request: Request, response: Response) {}
+      }
+
+      export { ${className} }
+  `
+
+  writeFile(dirFile, classController)
+}
+
 const main = () => {
   const readline = require('readline').createInterface({
     input: process.stdin,
@@ -118,7 +163,7 @@ const main = () => {
   })
 
   readline.question('Qual o nome do arquivo que gostaria de gerar?\nObs: Digite no singular. \n', fileName => {
-    readline.question('Qual desses tipos gostaria de gerar? \n[1]-Entity\n[2]-Repositories\n[3]-Service\n[4]-Todos\nDigite o numero correspondente.\n', typeFile => {
+    readline.question('Qual desses tipos gostaria de gerar? \n[1]-Entity\n[2]-Repositories\n[3]-Service\n[4]-Controller\n[5]-Todos\nDigite o numero correspondente.\n', typeFile => {
       if (typeFile === '1') {
         createEntity(fileName, false)
       }
@@ -132,10 +177,16 @@ const main = () => {
       }
 
       if (typeFile === '4') {
+        createController(fileName, false)
+      }
+
+      if (typeFile === '5') {
         createEntity(fileName, false)
         createRepo(fileName, false)
         createService(fileName, false)
+        createController(fileName, false)
       }
+
       readline.close()
     })
   })
