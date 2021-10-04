@@ -1,11 +1,9 @@
-import { BaseError } from './Base'
-
 class NotFoundExeption extends Error {
     statusCode: number
-    constructor(message: string) {
+    constructor (message: string) {
         super(message)
         this.message = message
-        this.status = 404
+        this.statusCode = 404
     }
 }
 

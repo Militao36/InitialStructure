@@ -4,22 +4,22 @@ const prisma = new PrismaClient({
     log: [
         {
             emit: 'event',
-            level: 'query',
+            level: 'query'
         },
         {
             emit: 'stdout',
-            level: 'error',
+            level: 'error'
         },
         {
             emit: 'stdout',
-            level: 'info',
+            level: 'info'
         },
         {
             emit: 'stdout',
-            level: 'warn',
-        },
+            level: 'warn'
+        }
     ],
-    errorFormat: 'pretty',
+    errorFormat: 'pretty'
 })
 
 prisma.$on('query', (e) => {
