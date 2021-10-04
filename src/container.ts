@@ -7,8 +7,8 @@ import { Logger } from './util/Logger'
 
 const definition = {
     prisma: asValue(prisma),
-    hash: asClass(CryptoHash),
-    logger: asClass(Logger)
+    hash: asClass(CryptoHash).singleton(),
+    logger: asClass(Logger).singleton()
 }
 
 const container = createContainer<IContainer>({
