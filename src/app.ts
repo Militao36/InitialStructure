@@ -1,6 +1,5 @@
-import { loadControllers, scopePerRequest } from 'awilix-express'
+import { loadControllers } from 'awilix-express'
 import express, { NextFunction, Request, Response } from 'express'
-import container from './container'
 
 const app = express()
 
@@ -15,8 +14,6 @@ app.use((request, _, next) => {
 
   return next()
 })
-
-app.use(scopePerRequest(container))
 
 app.use(loadControllers('controllers/*.ts', { cwd: __dirname }))
 
