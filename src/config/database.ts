@@ -23,8 +23,8 @@ const prisma = new PrismaClient({
 })
 
 prisma.$on('query', (e) => {
-    console.log('Query: ' + e.query)
-    console.log('Duration: ' + e.duration + 'ms')
+    console.info('Query: ' + e.query)
+    console.info('Duration: ' + e.duration + 'ms')
 })
 
 export { prisma }

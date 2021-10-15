@@ -1,14 +1,5 @@
 import { PrismaClient } from '@prisma/client'
 
-type Filter = {
-  fields: string[]
-  filter: {
-    [keyOrOperator: string]: {
-      [keyOrOperator: string]: any
-    }
-  }
-}
-
 class BaseRepo<T> {
   public prisma: PrismaClient;
   public table: string;
@@ -46,35 +37,6 @@ class BaseRepo<T> {
       where: {
         id: id
       }
-    })
-  }
-
-  async query<K> (query: Filter): Promise<K> {
-    const fields = query.fields.reduce((prev, current) => {
-      if (current.includes('.')) {
-        const [table, colunm] = current.split('.')
-        return {
-          ...prev,
-          [table]: {
-            [colunm]: true
-          }
-        }
-      }
-
-      return {
-        ...prev,
-        [current]: true
-      }
-    }, {})
-
-    const wheres = {}
-    for (const key in query.filter) {
-      wheres[key] = query.filter[key]
-    }
-
-    return this.prisma[this.table].findMany({
-      select: fields,
-      where: wheres
     })
   }
 }

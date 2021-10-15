@@ -3,11 +3,11 @@ import { NotFoundExeption } from '../exceptions/NotFound'
 
 abstract class BaseService<Repo, Entity> {
   private repo: Repo | any;
-  constructor(repo: Repo) {
+  constructor (repo: Repo) {
     this.repo = repo
   }
 
-  async save(data: Entity): Promise<string> {
+  async save (data: Entity): Promise<string> {
     this.validationSave(data)
     const id = v4()
 
@@ -19,18 +19,18 @@ abstract class BaseService<Repo, Entity> {
     return id
   }
 
-  async update(id: string, data: Entity): Promise<void> {
+  async update (id: string, data: Entity): Promise<void> {
     this.validationUpdate(data)
     await this.findById(id)
     await this.repo.update(data, id)
   }
 
-  async delete(id: string): Promise<void> {
+  async delete (id: string): Promise<void> {
     await this.findById(id)
     await this.repo.delete(id)
   }
 
-  async findById(id: string): Promise<Entity> {
+  async findById (id: string): Promise<Entity> {
     const data = await this.repo.findById(id)
 
     if (!data) {

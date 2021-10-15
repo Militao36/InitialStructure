@@ -135,6 +135,11 @@ const createController = (fileName = '', force = true) => {
       class ${className} {
         constructor ({ }:IContainer) {} 
 
+
+        @route('/:uuid')
+        @GET()
+        async getById (request: Request, response: Response) {}
+
         @POST()
         async save (request: Request, response: Response) {}
 
@@ -142,12 +147,8 @@ const createController = (fileName = '', force = true) => {
         @PATCH()
         async update (request: Request, response: Response) {}
 
-        @GET()
-        async get (request: Request, response: Response) {}
-
-        @route('/:uuid')
-        @GET()
-        async getById (request: Request, response: Response) {}
+        @DELTE()
+        async delete (request: Request, response: Response) {}
       }
 
       export { ${className} }
