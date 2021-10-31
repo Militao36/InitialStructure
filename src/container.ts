@@ -20,7 +20,7 @@ const container = createContainer<IContainer>({
 
 container.loadModules(
     [
-        ['services/*.ts', Lifetime.SINGLETON]
+        [process.env.AWILIX_SERVICES, Lifetime.SINGLETON]
     ],
     {
         formatName: 'camelCase'

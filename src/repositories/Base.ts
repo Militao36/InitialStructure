@@ -1,4 +1,5 @@
 import { PrismaClient } from '@prisma/client'
+import { NotFoundExeption } from '../exceptions/NotFound'
 
 class BaseRepo<T> {
   public prisma: PrismaClient;
@@ -30,6 +31,16 @@ class BaseRepo<T> {
         id: id
       }
     })
+  }
+
+  async findByIdOrFail (id: string): Promise<T> {
+    const data = await this.findById(id)
+
+    if (!data) {
+      throw new NotFoundExeption('Dado pesquisado não encontrado.')
+    }
+
+    return data
   }
 
   async delete (id: string): Promise<void> {

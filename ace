@@ -25,7 +25,7 @@ const createEntity = (fileName = '', force = true) => {
 
   const className = `${capitalizeFirstLetterUpperCase(fileName)}Entity`
 
-  const dirFile = path.resolve(__dirname, 'src', 'entity', `${className}.ts`)
+  const dirFile = path.resolve(__dirname, 'src', 'entities', `${className}.ts`)
 
   if (fs.existsSync(dirFile) && !force) {
     throw new Error('O arquivo já existe na pasta')
@@ -134,7 +134,6 @@ const createController = (fileName = '', force = true) => {
       @route('/${fileName.toLowerCase()}')
       class ${className} {
         constructor ({ }:IContainer) {} 
-
 
         @route('/:uuid')
         @GET()

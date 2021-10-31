@@ -1,14 +1,14 @@
 import { v4 } from 'uuid'
-import { NotFoundExeption } from '../exceptions/NotFound'
+import { IBaseService } from '../interfaces/IBaseService'
 
-abstract class BaseService<Repo, Entity> {
-  private repo: Repo | any;
+abstract class BaseService<Repo extends IBaseService, Entity> {
+  private repo: Repo;
   constructor (repo: Repo) {
     this.repo = repo
   }
 
   async save (data: Entity): Promise<string> {
-    this.validationSave(data)
+    await this.validationSave(data)
     const id = v4()
 
     await this.repo.save({
@@ -20,7 +20,7 @@ abstract class BaseService<Repo, Entity> {
   }
 
   async update (id: string, data: Entity): Promise<void> {
-    this.validationUpdate(data)
+    await this.validationUpdate(data)
     await this.findById(id)
     await this.repo.update(data, id)
   }
@@ -31,12 +31,7 @@ abstract class BaseService<Repo, Entity> {
   }
 
   async findById (id: string): Promise<Entity> {
-    const data = await this.repo.findById(id)
-
-    if (!data) {
-      throw new NotFoundExeption('DATA_NOT_FOUND')
-    }
-
+    const data = await this.repo.findByIdOrFail(id)
     return data
   }
 
