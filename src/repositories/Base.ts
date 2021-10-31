@@ -1,5 +1,5 @@
 import { PrismaClient } from '@prisma/client'
-import { NotFoundExeption } from '../exceptions/NotFound'
+import { NotFoundExeption } from '../util/exceptions/NotFound'
 
 class BaseRepo<T> {
   public prisma: PrismaClient;
