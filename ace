@@ -59,13 +59,12 @@ const createRepo = (fileName = '', force = true) => {
   const classNameEntity = `${capitalizeFirstLetterUpperCase(fileName)}Entity`
 
   const classRepo = `
-    import IContainer from '../interfaces/IContainer'
-    import { ${classNameEntity} } from '../entity/${classNameEntity}'
+    import { ${classNameEntity} } from '../entities/${classNameEntity}'
     import { BaseRepo } from './Base'
 
     class ${className} extends BaseRepo<${classNameEntity}> {
-        constructor ({ prisma }: IContainer) {
-            super(prisma, '${fileName.toLowerCase()}')
+        constructor ({ prisma }) {
+            super(prisma, '${capitalizeFirstLetterLowerCase(fileName)}s')
         }
     }
 
@@ -92,14 +91,13 @@ const createService = (fileName = '', force = true) => {
   const classNameRepoLowerCase = `${capitalizeFirstLetterLowerCase(fileName)}Repo`
 
   const classService = `
-      import IContainer from '../interfaces/IContainer'
       import { ${classNameRepoUpperCase} } from '../repositories/${classNameRepoUpperCase}'
-      import { ${classNameEntity} } from '../entity/${classNameEntity}'
+      import { ${classNameEntity} } from '../entities/${classNameEntity}'
       import { BaseService } from './Base'
       
       class ${className} extends BaseService<${classNameRepoUpperCase}, ${classNameEntity}>  {
         private ${classNameRepoLowerCase}: ${classNameRepoUpperCase};
-        constructor ({ ${classNameRepoLowerCase} }: IContainer | any) {
+        constructor ({ ${classNameRepoLowerCase} }) {
             super(${classNameRepoLowerCase})
             this.${classNameRepoLowerCase} = ${classNameRepoLowerCase}
         }
@@ -124,30 +122,48 @@ const createController = (fileName = '', force = true) => {
   }
 
   const classNameService = `${capitalizeFirstLetterUpperCase(fileName)}Service`
+  const classNameServiceLower = `${capitalizeFirstLetterLowerCase(fileName)}Service`
 
   const classController = `
-      import IContainer from '../interfaces/IContainer'
       import { ${classNameService} } from '../services/${classNameService}'
-      import { GET, PATCH, POST, route } from 'awilix-express'
+      import { GET, PATCH, POST, DELETE, route } from 'awilix-express'
       import { Request, Response } from 'express'
 
-      @route('/${fileName.toLowerCase()}')
+      @route('/${fileName.toLowerCase()}s')
       class ${className} {
-        constructor ({ }:IContainer) {} 
+        private ${classNameServiceLower}: ${classNameService}
+        constructor ({ ${classNameServiceLower} }) {
+          this.${classNameServiceLower} = ${classNameServiceLower}
+        } 
 
-        @route('/:uuid')
+        @route('/:id')
         @GET()
-        async getById (request: Request, response: Response) {}
+        async getById (request: Request, response: Response) {
+          const id = request.params.id
+          const data = await this.${classNameServiceLower}.findById(id)
+          return response.status(200).json({ data })
+        }
 
         @POST()
-        async save (request: Request, response: Response) {}
+        async save (request: Request, response: Response) {
+          const data = request.body
+          const id = await this.${classNameServiceLower}.save(data)
+          return response.status(201).json({ id })
+        }
 
-        @route('/:uuid')
+        @route('/:id')
         @PATCH()
-        async update (request: Request, response: Response) {}
+        async update (request: Request, response: Response) {
+          const id = request.params.id
+          const data = request.body
+          await this.${classNameServiceLower}.update(id, data)
+        }
 
-        @DELTE()
-        async delete (request: Request, response: Response) {}
+        @DELETE()
+        async delete (request: Request, response: Response) {
+          const id = request.params.id
+          await this.${classNameServiceLower}.delete(id)
+        }
       }
 
       export { ${className} }

@@ -26,6 +26,7 @@ class BaseRepo<T> {
   }
 
   async findById (id: string): Promise<T> {
+    console.log(id)
     return await this.prisma[this.table].findFirst({
       where: {
         id: id
