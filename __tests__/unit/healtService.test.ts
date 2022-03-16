@@ -5,6 +5,7 @@ describe('#healtService', () => {
 
   beforeEach(() => {
     // com o IoC só injetar qualquer Objeto simples em js e vai funcionar
+    // fazendo o mock da funcionalidade
     const logger = {
       info () { }
     }
