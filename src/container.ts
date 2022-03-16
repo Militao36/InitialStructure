@@ -1,15 +1,14 @@
 import { asClass, asValue, createContainer, InjectionMode, Lifetime } from 'awilix'
-import Emittery from 'emittery'
-
-import { prisma } from './util/config/database'
-import { CryptoHash } from './util/hash'
+import { HealtcheckService } from './services/healtcheck.service'
+import { database } from './util/config/database'
 import { Logger } from './util/Logger'
 
 const definition = {
-    prisma: asValue(prisma),
-    hash: asClass(CryptoHash).singleton(),
-    logger: asClass(Logger).singleton(),
-    emittery: asClass(Emittery).singleton()
+    // utils
+    logger: asValue(Logger),
+    database: asValue(database),
+    // services
+    healtcheckService: asClass(HealtcheckService).singleton()
 }
 
 const container = createContainer({

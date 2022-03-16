@@ -1,15 +1,11 @@
-class Logger {
-  info (...args: any) {
-    console.info(args)
-  }
+import pino from 'pino'
 
-  error (...args: any) {
-    console.error(args)
+export const Logger = pino({
+  level: 'debug',
+  transport: {
+    target: 'pino-pretty',
+    options: {
+      colorize: true
+    }
   }
-
-  warn (...args: any) {
-    console.warn(args)
-  }
-}
-
-export { Logger }
+})

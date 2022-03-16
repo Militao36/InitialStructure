@@ -1,16 +1,22 @@
-import express from 'express'
 import { loadControllers, scopePerRequest } from 'awilix-express'
+import express from 'express'
+import pinoHttp from 'pino-http'
+import container from './container'
 import { convertBodyRequestToNull } from './util/middlewares/ConvertBodyRequestToNull'
 import { errorHandler } from './util/middlewares/errorHandler'
-
-import container from './container'
 
 const app = express()
 
 app.use(express.json())
 
 app.disable('x-powered-by')
+
 // middlewares
+
+if (JSON.parse(process.env.LOGGER_HTTP)) {
+  app.use(pinoHttp({ logger: container.resolve('logger') }))
+}
+
 app.use(scopePerRequest(container))
 app.use(convertBodyRequestToNull)
 app.use(errorHandler)

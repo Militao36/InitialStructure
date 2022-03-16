@@ -1,30 +1,15 @@
-import { PrismaClient } from '@prisma/client'
+import 'dotenv/config'
+import knex from 'knex'
 
-const prisma = new PrismaClient({
-    log: [
-        {
-            emit: 'event',
-            level: 'query'
-        },
-        {
-            emit: 'stdout',
-            level: 'error'
-        },
-        {
-            emit: 'stdout',
-            level: 'info'
-        },
-        {
-            emit: 'stdout',
-            level: 'warn'
-        }
-    ],
-    errorFormat: 'pretty'
+export const database = knex({
+  client: 'mysql2',
+  connection: {
+    host: process.env.DB_HOST,
+    port: Number(process.env.DB_PORT),
+    user: process.env.DB_USER,
+    password: process.env.DB_PWD,
+    database: process.env.DB_NAME,
+    decimalNumbers: true,
+    dateStrings: true
+  }
 })
-
-prisma.$on('query', (e) => {
-    console.info('Query: ' + e.query)
-    console.info('Duration: ' + e.duration + 'ms')
-})
-
-export { prisma }
