@@ -1,4 +1,4 @@
-import { asClass, asValue, createContainer, InjectionMode, Lifetime } from 'awilix'
+import { asClass, asValue, createContainer, InjectionMode } from 'awilix'
 import { HealtcheckService } from './services/healtcheck.service'
 import { database } from './util/config/database'
 import { Logger } from './util/Logger'
@@ -14,18 +14,6 @@ const definition = {
 const container = createContainer({
     injectionMode: InjectionMode.PROXY
 })
-
-container.loadModules(
-    [
-        [process.env.AWILIX_SERVICES, Lifetime.SINGLETON]
-    ]
-)
-
-container.loadModules(
-    [
-        [process.env.AWILIX_REPOSITORIES, Lifetime.SINGLETON]
-    ]
-)
 
 container.register(definition)
 
